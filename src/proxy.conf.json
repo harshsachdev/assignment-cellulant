@@ -1,0 +1,7 @@
+{
+    "/api": {
+      "target": "https://crudcrud.com/",
+      "secure": true,
+      "changeOrigin": true
+    }
+}

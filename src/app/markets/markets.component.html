@@ -1,0 +1,74 @@
+<div class="container mt-3 align-top-heading-items">
+  <div class="row">
+    <p class="h4 text-default fw-bold">Forex Currency Rates</p>  
+  </div>
+  <div class="row btn-group btn-group-justified">
+    <a class="btn btn-success" [routerLink]="['add']">Add New</a>
+  </div>
+</div>
+
+<div class="container mt-3">
+    <div class="row mt-3">
+        <ng-container *ngIf="is_error">
+          <div class="row mt-3">
+            <p style="text-align:center;margin: unset;padding: 20px;">{{error_message}}</p>
+          </div>
+        </ng-container>
+        <div class="mat-elevation-z8">
+            <div class="loading-shade" *ngIf="isLoading">
+              <mat-spinner></mat-spinner>  
+            </div>
+            <div *ngIf="markets.length>0; else else_condition">
+              <table mat-table [dataSource]="dataSource">
+            
+                <!-- Market Column -->
+                <ng-container matColumnDef="market">
+                  <th mat-header-cell *matHeaderCellDef> Market </th>
+                  <td mat-cell *matCellDef="let element"> {{element.market}} </td>
+                </ng-container>
+            
+                <!-- Selling Price Column -->
+                <ng-container matColumnDef="selling_price">
+                  <th mat-header-cell *matHeaderCellDef> Selling Price </th>
+                  <td mat-cell *matCellDef="let element"> {{element.sellingPrice | currency:'USD':'symbol'}} </td>
+                </ng-container>
+            
+                <!-- Buying Price Column -->
+                <ng-container matColumnDef="buying_price">
+                  <th mat-header-cell *matHeaderCellDef> Buying Price </th>
+                  <td mat-cell *matCellDef="let element"> {{element.buyingPrice | currency:'USD':'symbol'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef>Action</th>
+                  <td mat-cell *matCellDef="let element">
+                      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                          <mat-icon>more_vert</mat-icon>
+                      </button>
+                      <mat-menu #menu="matMenu">
+                          <button mat-menu-item [routerLink]="['edit', element._id]" routerLinkActive="router-link-active" >
+                          <mat-icon [ngStyle]="{'color':'#2c46a5'}" aria-hidden="false" aria-label="Example home icon">edit</mat-icon>
+                          <span>Edit</span>
+                          </button>
+                          <button mat-menu-item (click)="deleteMarket(element._id)">
+                              <mat-icon [ngStyle]="{'color':'#bb3131'}" aria-hidden="false" aria-label="Example delete icon">delete</mat-icon>
+                          <span>Delete</span>
+                          </button>
+                      </mat-menu>
+                  </td>
+                </ng-container>
+            
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+            </div>
+            <ng-template #else_condition>
+              <p style="text-align:center;margin: unset;padding: 20px;">No data found</p>
+            </ng-template>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                           showFirstLastButtons 
+                           aria-label="Select page of periodic elements">
+            </mat-paginator>
+          </div>
+    </div>
+</div>
